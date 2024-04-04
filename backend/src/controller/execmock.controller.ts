@@ -46,7 +46,7 @@ export class ExecMockController {
         .send('Mock está desativado para esta endereco "' + endereco + '"');
     }
     if (mock.gravarRequisicao) {
-      let requisicao = new Requisicao(request.headers.referer, JSON.stringify(request.headers), JSON.stringify(request.body));
+      let requisicao = new Requisicao(request.headers.referer, JSON.stringify(request.headers), JSON.stringify(request.body), request.originalUrl);
       this.mockService.adicionarRequisicao(mock.id, requisicao);
     }
     if (mock.headers != null && mock.headers != '') {

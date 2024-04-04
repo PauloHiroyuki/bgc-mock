@@ -90,7 +90,7 @@ export class FormMocksComponent implements OnInit {
   }
 
   private alterarMock(id: any, command: any) {
-    this.mockService.alterarMock(id, this.form.value).subscribe({
+    this.mockService.alterarMock(id, command).subscribe({
       next: () => {
         this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Mock alterado com sucesso' });
       },

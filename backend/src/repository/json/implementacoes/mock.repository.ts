@@ -94,7 +94,6 @@ export class MockRepository implements IMockRepository {
         console.error('Erro ao criar o arquivo JSON:', err);
         return;
       }
-      console.log('Arquivo JSON criado com sucesso!');
     });
   }
 
@@ -107,10 +106,9 @@ export class MockRepository implements IMockRepository {
           console.error('Erro ao excluir o arquivo:', err);
           return;
         }
-        console.log('Arquivo excluído com sucesso!');
       });
     } else {
-      console.log('O arquivo não existe.');
+      console.error('O arquivo não existe.');
     }
   }
 

@@ -13,6 +13,7 @@ export interface MockDTO {
 
 export interface RequisicoesDTO {
     data: Date,
+    url: string,
     headers: string,
     body: string
 }

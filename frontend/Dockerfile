@@ -1,48 +1,11 @@
-###################
-# BUILD FOR LOCAL DEVELOPMENT
-###################
-
-FROM node:18-alpine As development
-
-WORKDIR /usr/src/app
-
-COPY --chown=node:node package*.json ./
-
-RUN npm ci
-
-COPY --chown=node:node . .
-
-USER node
-
-###################
-# BUILD FOR PRODUCTION
-###################
-
-FROM node:18-alpine As build
-
-WORKDIR /usr/src/app
-
-COPY --chown=node:node package*.json ./
-
-COPY --chown=node:node --from=development /usr/src/app/node_modules ./node_modules
-
-COPY --chown=node:node . .
-
+FROM node:latest as angular
+WORKDIR /app
+COPY package.json /app
+RUN npm install
+COPY . .
 RUN npm run build
 
-ENV NODE_ENV production
-
-RUN npm ci --only=production && npm cache clean --force
-
-USER node
-
-###################
-# PRODUCTION
-###################
-
-FROM node:18-alpine As production
-
-COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=build /usr/src/app/dist ./dist
-
-CMD [ "node", "dist/main.js" ]
+FROM nginx:alpine
+VOLUME "/var/cache/nginx"
+COPY --from=angular app/dist/bgc-mock-front/browser /usr/share/nginx/html
+COPY ./config/nginx.conf /etc/nginx/conf.d/default.conf

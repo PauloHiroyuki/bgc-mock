@@ -19,7 +19,7 @@ export class MockRepository implements IMockRepository {
         arquivos.forEach((nomeArquivo) => {
           this.mocks.push(JSON.parse(fs.readFileSync(nomeArquivo, 'utf8')));
         });
-      },
+      }
     );
   }
 
@@ -37,17 +37,33 @@ export class MockRepository implements IMockRepository {
 
   async pesquisarPorEndereco(endereco: string): Promise<Mock[]> {
     return new Promise((resolve, reject) => {
-      resolve(this.mocks.filter((x: Mock) => x.endereco === endereco));
+      resolve(
+        this.mocks.filter((x: Mock) => this.validarString(x.endereco, endereco))
+      );
     });
+  }
+
+  private validarString(pattern, str) {
+    // Escapar caracteres especiais na string de padrão
+    const escapedPattern = pattern.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+    // Substituir os parâmetros na string de padrão com um padrão de captura regex
+    const regexPattern = escapedPattern.replace(/:[^/]+/g, '([^/]+)');
+
+    // Construir a expressão regular
+    const regex = new RegExp('^' + regexPattern + '$');
+
+    // Testar a segunda string contra o padrão
+    return regex.test(str);
   }
 
   async pesquisarPorEnderecoDiferenteDoId(
     endereco: string,
-    id: string,
+    id: string
   ): Promise<Mock[]> {
     return new Promise((resolve, reject) => {
       const itens = this.mocks.filter(
-        (x: Mock) => x.endereco == endereco && x.id != id,
+        (x: Mock) => x.endereco == endereco && x.id != id
       );
       resolve(itens);
     });
@@ -99,12 +115,12 @@ export class MockRepository implements IMockRepository {
   }
 
   private async listarNomesDosArquivosDeUmaPasta(
-    caminhoDaPasta: string,
+    caminhoDaPasta: string
   ): Promise<string[]> {
     const readdirAsync = promisify(fs.readdir);
     const files = await readdirAsync(caminhoDaPasta);
     const arquivosComCaminhoCompleto = files.map((file) =>
-      path.join(caminhoDaPasta, file),
+      path.join(caminhoDaPasta, file)
     );
     return arquivosComCaminhoCompleto;
   }

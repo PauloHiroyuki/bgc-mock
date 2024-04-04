@@ -9,7 +9,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { MockService } from '../../shared/services/mock.service';
 import { MessagesModule } from 'primeng/messages';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG,  } from 'ngx-monaco-editor-v2';
 
 @Component({
@@ -35,7 +35,8 @@ export class FormMocksComponent implements OnInit {
     private fb: FormBuilder,
     private mockService: MockService, 
     private messageService: MessageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { 
     this.form = this.fb.group({
       endereco: [null, Validators.required],
@@ -70,6 +71,10 @@ export class FormMocksComponent implements OnInit {
         this.criarMock(this.form.value);
       }
     }
+  }
+
+  cancelar() {
+    this.router.navigate(['/']);
   }
 
   private criarMock(command: any) {

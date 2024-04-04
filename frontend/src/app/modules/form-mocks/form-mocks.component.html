@@ -37,7 +37,7 @@
             </div>
             <div class="col-span-12 flex flex-col">
                 <label for="body">Body de retorno:</label>
-                <textarea id="body" rows="5" pInputTextarea formControlName="body"></textarea>
+                <ngx-monaco-editor [options]="editorOptions" formControlName="body"></ngx-monaco-editor>
             </div>
         </div>
         <div class="row">

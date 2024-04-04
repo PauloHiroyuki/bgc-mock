@@ -10,18 +10,26 @@ import { MockService } from '../../shared/services/mock.service';
 import { MessagesModule } from 'primeng/messages';
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
+import { MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG,  } from 'ngx-monaco-editor-v2';
 
 @Component({
   selector: 'app-form-mocks',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, InputTextModule, ButtonModule, InputTextareaModule, InputNumberModule, InputSwitchModule, MessagesModule],
-  providers: [MessageService],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, InputTextModule, ButtonModule, InputTextareaModule, InputNumberModule, 
+    InputSwitchModule, MessagesModule, MonacoEditorModule],
+  providers: [MessageService, {
+    provide: NGX_MONACO_EDITOR_CONFIG,
+    useValue: MonacoEditorModule.forRoot()  
+  }],
   templateUrl: './form-mocks.component.html',
   styleUrl: './form-mocks.component.scss'
 })
 export class FormMocksComponent implements OnInit {
   form: FormGroup;
   id: string | undefined;
+  
+  editorOptions = {theme: 'vs-dark', language: 'json'};
+  code: string= 'function x() {\nconsole.log("Hello world!");\n}';
   
   constructor(
     private fb: FormBuilder,

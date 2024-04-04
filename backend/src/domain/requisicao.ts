@@ -4,8 +4,9 @@ export class Requisicao {
     body: string;
     headers: string;
     data: string;
+    metodo: string;
 
-    constructor(referer: string, headers: string, body: string, url: string) {        
+    constructor(referer: string, headers: string, body: string, url: string, metodo: string) {        
         //this.login = ValidationDomain.notNull(login, 'Campo login é obrigatório');
         //this.senha = ValidationDomain.notNull(senha, 'Campo senha é obrigatório');
         this.referer = referer;
@@ -13,5 +14,6 @@ export class Requisicao {
         this.body = body;
         this.url = url;
         this.data = new Date().toISOString();
+        this.metodo = metodo;
     }    
 }

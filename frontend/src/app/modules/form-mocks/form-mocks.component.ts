@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,12 +11,13 @@ import { MessagesModule } from 'primeng/messages';
 import { MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG,  } from 'ngx-monaco-editor-v2';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-form-mocks',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule, InputTextModule, ButtonModule, InputTextareaModule, InputNumberModule, 
-    InputSwitchModule, MessagesModule, MonacoEditorModule],
+    InputSwitchModule, MessagesModule, MonacoEditorModule, MultiSelectModule],
   providers: [MessageService, {
     provide: NGX_MONACO_EDITOR_CONFIG,
     useValue: MonacoEditorModule.forRoot()  
@@ -24,12 +25,13 @@ import { MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG,  } from 'ngx-monaco-edito
   templateUrl: './form-mocks.component.html',
   styleUrl: './form-mocks.component.scss'
 })
-export class FormMocksComponent implements OnInit {
+export class FormMocksComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   id: string | undefined;
   
   editorOptions = {theme: 'vs-dark', language: 'json'};
   code: string= 'function x() {\nconsole.log("Hello world!");\n}';
+  metodos: any[] = [{label: 'GET', value: 'GET'}, {label: 'POST', value: 'POST'}, {label: 'PUT', value: 'PUT'}, {label: 'DELETE', value: 'DELETE'}, {label: 'PATCH', value: 'PATCH'}, {label: 'OPTIONS', value: 'OPTIONS'}, {label: 'HEAD', value: 'HEAD'}]
   
   constructor(
     private fb: FormBuilder,
@@ -46,15 +48,25 @@ export class FormMocksComponent implements OnInit {
       headers: [null],
       body: [null, Validators.required],
       ativo: [true, Validators.required],
-      gravarRequisicao: [true, Validators.required]
+      gravarRequisicao: [true, Validators.required],
+      metodos: [null, Validators.required]
     });
   }
+  
+  ngAfterViewInit(): void {
+    const msgSucesso = this.route.snapshot.queryParams['msg-sucesso']!;
+    if (msgSucesso) {
+      this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Mock criado com sucesso' });
+    }
+  }
+
   ngOnInit(): void {
     this.id = this.route.snapshot.paramMap.get('id')!;
     if (this.id) {
       this.mockService.obterMockPorID(this.id).subscribe({
         next: (response) => {
           this.form.patchValue(response);
+          this.form.get('metodos')?.setValue(response.metodos.map((item: any) => this.metodos.find((metodo: any) => metodo.value === item)));
         },
         error: () => {
           this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao consultar o mock' });
@@ -65,6 +77,8 @@ export class FormMocksComponent implements OnInit {
 
   salvar() {
     if (this.form.valid) {
+      var command = this.form.value;
+      command.metodos = command.metodos.map((item: any) => item.value);
       if (this.id) {
         this.alterarMock(this.id, this.form.value);
       } else {
@@ -79,8 +93,8 @@ export class FormMocksComponent implements OnInit {
 
   private criarMock(command: any) {
     this.mockService.inserirMock(command).subscribe({
-      next: () => {
-        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Mock criado com sucesso' });
+      next: result => {
+        this.router.navigate([`/mock/${result.id}`], { queryParams: { "msg-sucesso" : true }});
       },
       error: (erro) => {
         console.error(erro);

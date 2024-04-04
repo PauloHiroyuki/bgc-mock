@@ -13,6 +13,7 @@ export class MockResponse {
     requisicoes: RequisicaoResponse[];
     ativo: boolean;
     gravarRequisicao: boolean;
+    metodos: string[];
 
     static convert(mock: Mock, mostrarRequisicoes: boolean): MockResponse {
         if (mock == null) return null;
@@ -29,6 +30,7 @@ export class MockResponse {
         }
         registro.ativo = mock.ativo;
         registro.gravarRequisicao = mock.gravarRequisicao;
+        registro.metodos = mock.metodos;
         return registro;
     }
     

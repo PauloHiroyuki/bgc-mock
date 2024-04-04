@@ -38,15 +38,20 @@ export class ExecMockController {
     if (mock == null) {
       return response
         .status(404)
-        .send('Não foi entrado mock para esta endereco "' + endereco + '"');
+        .send('Não foi entrado mock para esta endereco "/' + endereco + '"');
     }
     if (!mock.ativo) {
       return response
         .status(422)
-        .send('Mock está desativado para esta endereco "' + endereco + '"');
+        .send('Mock está desativado para esta endereco "/' + endereco + '"');
+    }
+    if (mock.metodos.includes(request.method) == false) {
+      return response
+        .status(405)
+        .send('Método não permitido para esta endereco "/' + endereco + '"');
     }
     if (mock.gravarRequisicao) {
-      let requisicao = new Requisicao(request.headers.referer, JSON.stringify(request.headers), JSON.stringify(request.body), request.originalUrl);
+      let requisicao = new Requisicao(request.headers.referer, JSON.stringify(request.headers), JSON.stringify(request.body), request.originalUrl, request.method);
       this.mockService.adicionarRequisicao(mock.id, requisicao);
     }
     if (mock.headers != null && mock.headers != '') {

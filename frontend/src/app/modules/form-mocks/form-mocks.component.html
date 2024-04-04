@@ -12,14 +12,18 @@
                 <input id="endereco" type="text" pInputText formControlName="endereco"/>
             </div>
             <div class="col-span-4 flex flex-col gap-1.5">
-                <label for="httpStatus" class="font-semibold">Http Status:</label>
-                <p-inputNumber inputId="httpStatus" formControlName="httpStatus"></p-inputNumber>
+                <label for="metodos" class="font-semibold">Métodos:</label>
+                <p-multiSelect [options]="metodos" optionLabel="label" formControlName="metodos"></p-multiSelect>
             </div>
             <div class="col-span-2 flex flex-col gap-1.5">
                 <label for="ativo" class="font-semibold">Ativo:</label>
                 <p-inputSwitch id="ativo" formControlName="ativo"></p-inputSwitch>
             </div>
-            <div class="col-span-6 flex flex-col gap-1.5">
+            <div class="col-span-3 flex flex-col gap-1.5">
+                <label for="httpStatus" class="font-semibold">Http Status:</label>
+                <p-inputNumber inputId="httpStatus" formControlName="httpStatus"></p-inputNumber>
+            </div>
+            <div class="col-span-3 flex flex-col gap-1.5">
                 <label for="contentType" class="font-semibold">ContentType:</label>
                 <input id="contentType" type="text" pInputText formControlName="contentType"/>
             </div>

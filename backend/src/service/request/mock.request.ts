@@ -16,5 +16,6 @@ export class MockRequest {
     headers: string;
     body: string; 
     ativo: boolean;
-    gravarRequisicao: boolean;
+    gravarRequisicao: boolean;    
+    metodos: string[];
 }

@@ -21,7 +21,7 @@ export class MockService {
             throw new ExcecaoDeNegocio('Endereço já cadastrada.');
         }
 
-        var registro = new Mock(null, input.endereco, input.httpStatus, input.contentType, input.charset, input.headers, input.body, [], true, true);
+        var registro = new Mock(null, input.endereco, input.httpStatus, input.contentType, input.charset, input.headers, input.body, [], true, true, input.metodos);
         var registroGravado = this.repositorio.incluir(registro);
         return (await registroGravado).id;
     }
@@ -53,6 +53,7 @@ export class MockService {
         registro.body = input.body;
         registro.ativo = input.ativo;
         registro.gravarRequisicao = input.gravarRequisicao;
+        registro.metodos = input.metodos;
 
         this.repositorio.alterar(registro);
     }

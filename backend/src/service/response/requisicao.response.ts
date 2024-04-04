@@ -7,6 +7,7 @@ export class RequisicaoResponse {
     headers: string;
     data: string;
     url: string;
+    metodo: string;
 
     static convert(mock: Requisicao): RequisicaoResponse {
         if (mock == null) return null;
@@ -16,6 +17,7 @@ export class RequisicaoResponse {
         registro.body = mock.body;
         registro.data = mock.data;
         registro.url = mock.url;
+        registro.metodo = mock.metodo;
         return registro;
     }
     

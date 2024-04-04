@@ -10,6 +10,7 @@
             <thead>
                 <tr>
                     <th>URL</th>
+                    <th>Métodos</th>
                     <th>Ativo</th>
                     <th>Logs</th>
                     <th>Ações</th>
@@ -19,6 +20,7 @@
                 @for (mock of mocks; track mock) {
                 <tr>
                     <td class="text-center">/{{mock.endereco}}</td>
+                    <td class="text-center">{{mock.metodos}}</td>
                     <td class="text-center"><p-inputSwitch [(ngModel)]="mock.ativo" [disabled]="true"></p-inputSwitch></td>
                     <td class="text-center"><p-inputSwitch [(ngModel)]="mock.gravarRequisicao" [disabled]="true"></p-inputSwitch></td>
                     <td class="text-center">

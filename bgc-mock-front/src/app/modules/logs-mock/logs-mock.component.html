@@ -1,0 +1,28 @@
+
+<p-messages></p-messages>
+@if (mock) {
+<div class="flex flex-col p-2">
+    <div class="flex flex-row justify-between justify-items-center items-center">
+        <div class="text-4xl font-bold p-2">
+            Detalhamento do Mock no endereco "{{mock.endereco}}"
+        </div>
+        <p-button icon="pi pi-times" [raised]="true" label="Limpar Requisicões" severity="danger" (click)="limpar($event)"></p-button>
+    </div>
+
+    <div>
+        <div class="text-lg font-semibold">Requisições</div>
+    @for(requisicao of mock.requisicoes; track requisicao) {
+        <div class="grid grid-cols-12 gap-2 border-solid rounded-md border p-2 mb-2">
+            <div class="col-span-1 font-semibold">Data:</div>
+            <div class="col-span-11">{{requisicao.data | date:'dd/MM/yyyy hh:mm:ss'}}</div>
+            <div class="col-span-1 font-semibold">Body:</div>
+            <div class="col-span-11">{{requisicao.body}}</div>
+            <div class="col-span-1 font-semibold">Headers:</div>
+            <div class="col-span-11">{{requisicao.headers}}</div>
+        </div>
+    }
+    </div>
+</div>
+}
+
+<p-confirmDialog></p-confirmDialog>

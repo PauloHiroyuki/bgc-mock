@@ -1,0 +1,37 @@
+<p-messages></p-messages>
+<div class="flex flex-col p-2">
+    <div class="flex flex-row justify-between justify-items-center items-center">
+        <div class="text-4xl font-bold p-2">
+            Lista de Mocks
+        </div>
+        <p-button icon="pi pi-plus" [raised]="true" label="Novo Mock" routerLink="/mock"></p-button>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>URL</th>
+                    <th>Ativo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (mock of mocks; track mock) {
+                <tr>
+                    <td class="text-center">{{mock.endereco}}</td>
+                    <td class="text-center"><p-inputSwitch [(ngModel)]="mock.ativo" [disabled]="true"></p-inputSwitch></td>
+                    <td class="text-center">
+                        <div class="flex gap-2 justify-center">
+                            <p-button icon="pi pi-search" [raised]="true" [routerLink]="'/mock/' + mock.id + '/logs'"></p-button>
+                            <p-button icon="pi pi-pencil" [raised]="true" severity="secondary"  [routerLink]="'/mock/' + mock.id"></p-button>
+                            <p-button icon="pi pi-times" [raised]="true" severity="danger" (click)="remover($event, mock)"></p-button>
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<p-confirmDialog></p-confirmDialog>

@@ -1,0 +1,48 @@
+<p-messages></p-messages>
+<div class="flex flex-col p-2">
+    <div class="flex flex-row justify-between justify-items-center items-center">
+        <div class="text-4xl font-bold p-2">
+            Lista de Mocks
+        </div>
+    </div>
+    <form [formGroup]="form">
+        <div class="grid grid-cols-12 gap-2">
+            <div class="col-span-6 flex flex-col">
+                <label for="endereco">URL:</label>
+                <input id="endereco" type="text" pInputText formControlName="endereco"/>
+            </div>
+            <div class="col-span-4 flex flex-col">
+                <label for="httpStatus">Http Status:</label>
+                <p-inputNumber inputId="httpStatus" formControlName="httpStatus"></p-inputNumber>
+            </div>
+            <div class="col-span-2 flex flex-col">
+                <label for="ativo">Ativo:</label>
+                <p-inputSwitch id="ativo" formControlName="ativo"></p-inputSwitch>
+            </div>
+            <div class="col-span-6 flex flex-col">
+                <label for="contentType">ContentType:</label>
+                <input id="contentType" type="text" pInputText formControlName="contentType"/>
+            </div>
+            <div class="col-span-4 flex flex-col">
+                <label for="charset">Charset:</label>
+                <input id="charset" type="text" pInputText formControlName="charset"/>
+            </div>
+            <div class="col-span-2 flex flex-col">
+                <label for="gravarRequisicao">Gravar Requisição:</label>
+                <p-inputSwitch id="gravarRequisicao" formControlName="gravarRequisicao"></p-inputSwitch>
+            </div>
+            <div class="col-span-12 flex flex-col">
+                <label for="headers">Headers de retorno:</label>
+                <textarea id="headers" rows="5" pInputTextarea formControlName="headers"></textarea>
+            </div>
+            <div class="col-span-12 flex flex-col">
+                <label for="body">Body de retorno:</label>
+                <textarea id="body" rows="5" pInputTextarea formControlName="body"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <p-button icon="pi pi-check" [raised]="true" label="Salvar" severity="secondary" 
+                (click)="salvar()" [disabled]="form.invalid"></p-button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,90 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { MockService } from '../../shared/services/mock.service';
+import { MessagesModule } from 'primeng/messages';
+import { MessageService } from 'primeng/api';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-form-mocks',
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, InputTextModule, ButtonModule, InputTextareaModule, InputNumberModule, InputSwitchModule, MessagesModule],
+  providers: [MessageService],
+  templateUrl: './form-mocks.component.html',
+  styleUrl: './form-mocks.component.scss'
+})
+export class FormMocksComponent implements OnInit {
+  form: FormGroup;
+  id: string | undefined;
+  
+  constructor(
+    private fb: FormBuilder,
+    private mockService: MockService, 
+    private messageService: MessageService,
+    private route: ActivatedRoute
+  ) { 
+    this.form = this.fb.group({
+      endereco: [null, Validators.required],
+      httpStatus: [200, Validators.required],
+      contentType: ['application/json', Validators.required],
+      charset: ['UTF-8', Validators.required],
+      headers: [null],
+      body: [null, Validators.required],
+      ativo: [true, Validators.required],
+      gravarRequisicao: [true, Validators.required]
+    });
+  }
+  ngOnInit(): void {
+    this.id = this.route.snapshot.paramMap.get('id')!;
+    if (this.id) {
+      this.mockService.obterMockPorID(this.id).subscribe({
+        next: (response) => {
+          this.form.patchValue(response);
+        },
+        error: () => {
+          this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao consultar o mock' });
+        }
+      });
+    }
+  }
+
+  salvar() {
+    if (this.form.valid) {
+      if (this.id) {
+        this.alterarMock(this.id, this.form.value);
+      } else {
+        this.criarMock(this.form.value);
+      }
+    }
+  }
+
+  private criarMock(command: any) {
+    this.mockService.inserirMock(command).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Mock criado com sucesso' });
+      },
+      error: (erro) => {
+        console.error(erro);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao criar o mock' });
+      }
+    });
+  }
+
+  private alterarMock(id: any, command: any) {
+    this.mockService.alterarMock(id, this.form.value).subscribe({
+      next: () => {
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Mock alterado com sucesso' });
+      },
+      error: (erro) => {
+        console.error(erro);
+        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao alterar o mock' });
+      }
+    });
+  }
+}

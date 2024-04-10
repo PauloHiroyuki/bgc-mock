@@ -6,6 +6,7 @@ import { ExcecaoDeNegocio } from "../common/erro/excecao-negocio";
 import { MockRequest } from "./request/mock.request";
 import { MockResponse } from "./response/mock.response";
 import { MockRepository } from "src/repository/json/implementacoes/mock.repository";
+import { CasoEspecial } from "src/domain/caso-especial";
 
 @Injectable()
 export class MockService {
@@ -22,6 +23,9 @@ export class MockService {
         }
 
         var registro = new Mock(null, input.endereco, input.httpStatus, input.contentType, input.charset, input.headers, input.body, [], true, true, input.metodos);
+        input.casosEspeciais.forEach(casoEspecial => {
+            registro.casosEspeciais.push(new CasoEspecial(casoEspecial.descricao, casoEspecial.validador ,casoEspecial.httpStatus, casoEspecial.contentType, casoEspecial.charset, casoEspecial.headers, casoEspecial.body));
+        });
         var registroGravado = this.repositorio.incluir(registro);
         return (await registroGravado).id;
     }
@@ -54,6 +58,10 @@ export class MockService {
         registro.ativo = input.ativo;
         registro.gravarRequisicao = input.gravarRequisicao;
         registro.metodos = input.metodos;
+        registro.casosEspeciais = [];
+        input.casosEspeciais.forEach(casoEspecial => {
+            registro.casosEspeciais.push(new CasoEspecial(casoEspecial.descricao, casoEspecial.validador ,casoEspecial.httpStatus, casoEspecial.contentType, casoEspecial.charset, casoEspecial.headers, casoEspecial.body));
+        });
 
         this.repositorio.alterar(registro);
     }

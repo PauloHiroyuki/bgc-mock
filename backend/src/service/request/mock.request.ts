@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, IsEmail } from 'class-validator';
+import { CasoEspecialRequest } from './caso-especial.request';
 
 export class MockRequest {
     
@@ -18,4 +19,5 @@ export class MockRequest {
     ativo: boolean;
     gravarRequisicao: boolean;    
     metodos: string[];
+    casosEspeciais: CasoEspecialRequest[];
 }

@@ -1,5 +1,6 @@
 //import { ValidationDomain } from "../common/util/validation.model";
 
+import { CasoEspecial } from "./caso-especial";
 import { Requisicao } from "./requisicao";
 
 export class Mock {
@@ -12,6 +13,7 @@ export class Mock {
     headers: string;
     body: string; 
     requisicoes: Requisicao[];
+    casosEspeciais: CasoEspecial[]
     ativo: boolean;
     gravarRequisicao: boolean;
 
@@ -33,5 +35,6 @@ export class Mock {
         if (this.requisicoes == null){
             this.requisicoes = [];
         }
+        this.casosEspeciais = [];
     }
 }

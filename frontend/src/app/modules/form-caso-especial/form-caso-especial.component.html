@@ -1,0 +1,40 @@
+
+<div class="flex flex-col">
+    <form [formGroup]="form">
+        <div class="grid grid-cols-12 gap-2">
+            <div class="col-span-6 flex flex-col gap-1.5">
+                <label for="descricao" class="font-semibold">Descrição:</label>
+                <input id="descricao" type="text" pInputText formControlName="descricao"/>
+            </div>
+            <div class="col-span-6 flex flex-col gap-1.5">
+                <label for="httpStatus" class="font-semibold">Http Status:</label>
+                <p-inputNumber inputId="httpStatus" formControlName="httpStatus"></p-inputNumber>
+            </div>
+            <div class="col-span-6 flex flex-col gap-1.5">
+                <label for="contentType" class="font-semibold">ContentType:</label>
+                <input id="contentType" type="text" pInputText formControlName="contentType"/>
+            </div>
+            <div class="col-span-6 flex flex-col gap-1.5">
+                <label for="charset" class="font-semibold">Charset:</label>
+                <input id="charset" type="text" pInputText formControlName="charset"/>
+            </div>
+            <div class="col-span-12 flex flex-col gap-1.5">
+                <label for="validador" class="font-semibold">Validador:</label>
+                <ngx-monaco-editor [options]="editorJavascriptOptions" formControlName="validador"></ngx-monaco-editor>
+            </div>
+            <div class="col-span-12 flex flex-col gap-1.5">
+                <label for="headers" class="font-semibold">Headers de retorno:</label>
+                <ngx-monaco-editor [options]="editorOptions" formControlName="headers"></ngx-monaco-editor>
+            </div>
+            <div class="col-span-12 flex flex-col gap-1.5">
+                <label for="body" class="font-semibold">Body de retorno:</label>
+                <ngx-monaco-editor [options]="editorOptions" formControlName="body"></ngx-monaco-editor>
+            </div>
+        </div>
+        <div class="flex flex-row justify-between m-3">
+            <p-button icon="pi pi-times" [raised]="true" label="Fechar" severity="secondary" (onClick)="fechar()"></p-button>
+            <p-button icon="pi pi-check" [raised]="true" label="Salvar" severity="success" 
+                (click)="salvar()" [disabled]="form.invalid"></p-button>
+        </div>
+    </form>
+</div>

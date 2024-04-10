@@ -12,13 +12,15 @@ import { MessageService } from 'primeng/api';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MonacoEditorModule, NGX_MONACO_EDITOR_CONFIG,  } from 'ngx-monaco-editor-v2';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DialogService, DynamicDialogModule, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { FormCasoEspecialComponent } from '../form-caso-especial/form-caso-especial.component';
 
 @Component({
   selector: 'app-form-mocks',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule, CommonModule, InputTextModule, ButtonModule, InputTextareaModule, InputNumberModule, 
-    InputSwitchModule, MessagesModule, MonacoEditorModule, MultiSelectModule],
-  providers: [MessageService, {
+    InputSwitchModule, MessagesModule, MonacoEditorModule, MultiSelectModule, DynamicDialogModule ],
+  providers: [MessageService, DialogService, {
     provide: NGX_MONACO_EDITOR_CONFIG,
     useValue: MonacoEditorModule.forRoot()  
   }],
@@ -28,6 +30,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 export class FormMocksComponent implements OnInit, AfterViewInit {
   form: FormGroup;
   id: string | undefined;
+  ref: DynamicDialogRef | undefined;
   
   editorOptions = {theme: 'vs-dark', language: 'json'};
   code: string= 'function x() {\nconsole.log("Hello world!");\n}';
@@ -38,7 +41,8 @@ export class FormMocksComponent implements OnInit, AfterViewInit {
     private mockService: MockService, 
     private messageService: MessageService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService
   ) { 
     this.form = this.fb.group({
       endereco: [null, Validators.required],
@@ -49,7 +53,8 @@ export class FormMocksComponent implements OnInit, AfterViewInit {
       body: [null, Validators.required],
       ativo: [true, Validators.required],
       gravarRequisicao: [true, Validators.required],
-      metodos: [null, Validators.required]
+      metodos: [null, Validators.required],
+      casosEspeciais: [new Array()]
     });
   }
   
@@ -89,6 +94,57 @@ export class FormMocksComponent implements OnInit, AfterViewInit {
 
   cancelar() {
     this.router.navigate(['/']);
+  }
+
+  removerCasoEspecial(casoEspecial: any) {
+    this.form.get('casosEspeciais')?.setValue(this.form.get('casosEspeciais')?.value.filter((x: any) => x !== casoEspecial));
+  }
+
+  adicionarCasoEspecial() {
+    this.ref = this.dialogService.open(FormCasoEspecialComponent, {
+      header: 'Cadastro de caso especial',
+      width: '50vw',
+      modal:true,
+      breakpoints: {
+          '960px': '75vw',
+          '640px': '90vw'
+      },
+      data: {
+        form: this.form
+      }
+    });
+
+    this.ref.onClose.subscribe((data: any) => {
+      if (data) {
+        const casosEspeciais = this.form.get('casosEspeciais')?.value ?? [];
+        casosEspeciais.push(data);
+        this.form.get('casosEspeciais')?.setValue(casosEspeciais);
+      }
+    });
+  }
+
+  editarCasoEspecial(casoEspecial: any) {
+    this.ref = this.dialogService.open(FormCasoEspecialComponent, {
+      header: 'Cadastro de caso especial',
+      width: '50vw',
+      modal:true,
+      breakpoints: {
+          '960px': '75vw',
+          '640px': '90vw'
+      },
+      data: {
+        casoEspecial: casoEspecial
+      }
+    });
+
+    this.ref.onClose.subscribe((data: any) => {
+      if (data) {
+        this.removerCasoEspecial(casoEspecial);
+        const casosEspeciais = this.form.get('casosEspeciais')?.value ?? [];
+        casosEspeciais.push(data);
+        this.form.get('casosEspeciais')?.setValue(casosEspeciais);
+      }
+    });
   }
 
   private criarMock(command: any) {

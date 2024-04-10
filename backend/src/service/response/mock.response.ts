@@ -1,6 +1,8 @@
 import { Requisicao } from "src/domain/requisicao";
 import { Mock } from "../../domain/mock";
 import { RequisicaoResponse } from "./requisicao.response";
+import { CasoEspecial } from "src/domain/caso-especial";
+import { CasoEspecialResponse } from "./caso-especial.response";
 
 export class MockResponse {
     id: string;
@@ -14,6 +16,7 @@ export class MockResponse {
     ativo: boolean;
     gravarRequisicao: boolean;
     metodos: string[];
+    casosEspeciais: CasoEspecialResponse[]
 
     static convert(mock: Mock, mostrarRequisicoes: boolean): MockResponse {
         if (mock == null) return null;
@@ -31,6 +34,7 @@ export class MockResponse {
         registro.ativo = mock.ativo;
         registro.gravarRequisicao = mock.gravarRequisicao;
         registro.metodos = mock.metodos;
+        registro.casosEspeciais = CasoEspecialResponse.convertList(mock.casosEspeciais);
         return registro;
     }
     
